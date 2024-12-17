@@ -8,6 +8,7 @@ TagManager:
   - cannon
   - spawnPoint
   - aim_tag
+  - respawnDiana
   layers:
   - Default
   - TransparentFX

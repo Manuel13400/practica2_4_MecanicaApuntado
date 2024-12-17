@@ -16,7 +16,7 @@ public class ValoresAleatorios : MonoBehaviour
     void Start()
     {
         bullet.gameObject.transform.localScale = new Vector3(1, 1, 1);
-        DispararBala.velocidadDisparo = 1500;
+        //DispararBala.velocidadDisparo = 1500;
         bullet.GetComponent<Renderer>().sharedMaterial.color = Color.yellow;
     }
 
@@ -27,7 +27,7 @@ public class ValoresAleatorios : MonoBehaviour
         bullet.gameObject.transform.localScale = new Vector3(sizeAleatorio, sizeAleatorio, sizeAleatorio);
 
         velocidadAleatoria = Random.Range(500, 2500);
-        DispararBala.velocidadDisparo = velocidadAleatoria;
+        //DispararBala.velocidadDisparo = velocidadAleatoria;
 
         colorAleatorio = Random.Range(1, 6);
     }
