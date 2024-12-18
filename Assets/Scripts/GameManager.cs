@@ -9,20 +9,23 @@ public class GameManager : MonoBehaviour
     static int numBalas = 0;
     static int numDianasDestruidas = 0;
 
-    // Busca el objeto llamado "Text red" e introduce ahi el texto con la cifra total
+    // Busca los objetos de texto
     static public GameObject bala_texto;
     static public GameObject diana_texto;
     static public GameObject fuerza_texto;
 
+    // Instantiate de la diana y lista de posiciones de las dianas
     public GameObject dianaInstanciada;
     GameObject[] posicionesDiana;
 
     void Start()
     {
+        // Objetos texto
         bala_texto = GameObject.Find("bulletCount");
         diana_texto = GameObject.Find("targetCount");
         fuerza_texto = GameObject.Find("strength");
 
+        // Busca los puntos de reaparicion de las dianas
         posicionesDiana = GameObject.FindGameObjectsWithTag("respawnDiana");
 
         GenerarNuevaDiana();
@@ -52,17 +55,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Aumenta el numero de dianas destruidas (texto)
     static public void IncNumDianas()
     {
         numDianasDestruidas++;
         diana_texto.GetComponent<TMP_Text>().SetText("Dianas: " + numDianasDestruidas.ToString());
     }
 
+    // Potencia de la bala (texto)
     static public void PotenciaBala()
     {
         fuerza_texto.GetComponent<TMP_Text>().SetText("Fuerza: " + DispararBala.potenciaActual.ToString());
     }
 
+    // Genera una diana en uno de los puntos de reaparicion elegidos al azar
     public void GenerarNuevaDiana()
     {
         if (dianaInstanciada != null && posicionesDiana.Length > 0)

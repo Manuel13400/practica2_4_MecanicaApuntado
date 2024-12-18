@@ -9,6 +9,7 @@ public class DispararBala : MonoBehaviour
     public GameObject posicionFinal;
     public GameObject cannon;
 
+    // Objeto mirilla
     GameObject aimTarget;
 
     // Potencia del disparo
@@ -16,6 +17,7 @@ public class DispararBala : MonoBehaviour
     static public float potenciaMaxima = 3250f;
     static public float potenciaActual = 0;
 
+    // Tiempo para calcular la potencia del disparo
     float tiempoInicio;
     float tiempoFinal;
 
@@ -25,11 +27,13 @@ public class DispararBala : MonoBehaviour
 
     private void Start()
     {
+        // Busca la mirilla
         aimTarget = GameObject.Find("AIM_TARGET");
     }
 
     private void Update()
     {
+        // Permite utilizar wasd para mover la mirilla. Ademas, establece limites de movimiento para la misma
         if (Input.GetKey("w"))  {   aimTarget.transform.position += Vector3.up * 9 * Time.deltaTime;      }
         if (Input.GetKey("s"))  {   aimTarget.transform.position += Vector3.down * 9 * Time.deltaTime;    }
 
@@ -42,15 +46,16 @@ public class DispararBala : MonoBehaviour
 
         if (aimTarget.transform.position.x > 5) { aimTarget.transform.position = new Vector3(5, aimTarget.transform.position.y, aimTarget.transform.position.z); }
         if (aimTarget.transform.position.x < -5) { aimTarget.transform.position = new Vector3(-5, aimTarget.transform.position.y, aimTarget.transform.position.z); }
-
     }
 
+    // Al mantener pulsado el boton el cañon cambia a color rojo e inicia una cuenta para calcular la potencia del tiro
     private void OnMouseDown()
     {
         tiempoInicio = Time.time;
         cannon.GetComponent<Renderer>().material.color = Color.red;
     }
 
+    // Al dejar de pulsar el boton se dispara la bala y el cañon vuelve a su color original
     private void OnMouseUp()
     {
         tiempoFinal = Time.time;
@@ -59,6 +64,7 @@ public class DispararBala : MonoBehaviour
 
         potenciaActual = ((tiempoFinal - tiempoInicio) * 5) * potenciaMinima;
 
+        // Limite de potencia para no pasarse
         if (potenciaActual > potenciaMaxima)
         {
             potenciaActual = potenciaMaxima;
