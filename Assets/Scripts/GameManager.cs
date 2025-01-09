@@ -18,6 +18,11 @@ public class GameManager : MonoBehaviour
     public GameObject dianaInstanciada;
     GameObject[] posicionesDiana;
 
+    // Temporizador
+    GameObject temporizadorCanvas;
+    TextMeshProUGUI temporizadorTexto;
+    static float totalSegundos;
+
     void Start()
     {
         // Objetos texto
@@ -29,6 +34,13 @@ public class GameManager : MonoBehaviour
         posicionesDiana = GameObject.FindGameObjectsWithTag("respawnDiana");
 
         GenerarNuevaDiana();
+
+        IniciarTiempo();
+    }
+
+    private void Update()
+    {
+        Temporizador();
     }
 
     // Reinicia el total de balas (texto)
@@ -71,12 +83,44 @@ public class GameManager : MonoBehaviour
     // Genera una diana en uno de los puntos de reaparicion elegidos al azar
     public void GenerarNuevaDiana()
     {
-        if (dianaInstanciada != null && posicionesDiana.Length > 0)
+        if (dianaInstanciada != null)
         {
-            int numeroAleatorio = Random.Range(0, posicionesDiana.Length);
-            GameObject dianaAleatoria = posicionesDiana[numeroAleatorio];
+            GameObject dianaAleatoria;
 
-            dianaAleatoria = Instantiate(dianaInstanciada, dianaAleatoria.transform.position, Quaternion.identity);
+            dianaAleatoria = Instantiate(dianaInstanciada, new Vector3(Random.Range(-10, 10), Random.Range(3, 6), 10), Quaternion.identity);
         }
+    }
+
+    void IniciarTiempo()
+    {
+        // Temporizador
+        totalSegundos = 20;
+
+        temporizadorCanvas = GameObject.Find("time");
+        temporizadorTexto = temporizadorCanvas.GetComponent<TextMeshProUGUI>();
+
+        temporizadorTexto.text = "Tiempo restante: " + totalSegundos;
+    }
+
+    void Temporizador()
+    {
+        // Temporizador
+        totalSegundos = totalSegundos - Time.deltaTime;
+
+        if (totalSegundos < 0)
+        {
+            totalSegundos = 0;
+        }
+
+        float minutos = Mathf.FloorToInt(totalSegundos / 60);
+        float segundos = Mathf.FloorToInt(totalSegundos % 60);
+
+        temporizadorTexto.text = "Tiempo restante: " + string.Format("{0:00}:{1:00}", minutos, segundos);
+
+    }
+
+    static public void AddTiempo()
+    {
+        totalSegundos += 3;
     }
 }

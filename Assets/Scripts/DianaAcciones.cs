@@ -13,6 +13,7 @@ public class DianaAcciones : MonoBehaviour
             Destroy(collision.gameObject);
             GameManager.DecNumBalas();
             GameManager.IncNumDianas();
+            GameManager.AddTiempo();
             Destroy(gameObject);
 
             FindObjectOfType<GameManager>().GenerarNuevaDiana();

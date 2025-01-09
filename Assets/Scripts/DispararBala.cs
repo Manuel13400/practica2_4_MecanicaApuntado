@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DispararBala : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class DispararBala : MonoBehaviour
     public GameObject posicionInicial;
     public GameObject posicionFinal;
     public GameObject cannon;
+    public Button Shoot;
 
     // Objeto mirilla
     GameObject aimTarget;
@@ -27,7 +29,8 @@ public class DispararBala : MonoBehaviour
 
     private void Start()
     {
-        // Busca la mirilla
+        Button btn = Shoot.GetComponent<Button>();
+        btn.onClick.AddListener(ShootClick);
         aimTarget = GameObject.Find("AIM_TARGET");
     }
 
@@ -37,15 +40,15 @@ public class DispararBala : MonoBehaviour
         if (Input.GetKey("w"))  {   aimTarget.transform.position += Vector3.up * 9 * Time.deltaTime;      }
         if (Input.GetKey("s"))  {   aimTarget.transform.position += Vector3.down * 9 * Time.deltaTime;    }
 
-        if (aimTarget.transform.position.y > 6) { aimTarget.transform.position = new Vector3(aimTarget.transform.position.x, 6, aimTarget.transform.position.z); }
+        if (aimTarget.transform.position.y > 7) { aimTarget.transform.position = new Vector3(aimTarget.transform.position.x, 7, aimTarget.transform.position.z); }
         if (aimTarget.transform.position.y < 1) { aimTarget.transform.position = new Vector3(aimTarget.transform.position.x, 1, aimTarget.transform.position.z); }
 
 
         if (Input.GetKey("d"))  {   aimTarget.transform.position += Vector3.right * 9 * Time.deltaTime;   }
         if (Input.GetKey("a"))  {   aimTarget.transform.position += Vector3.left * 9 * Time.deltaTime;    }
 
-        if (aimTarget.transform.position.x > 5) { aimTarget.transform.position = new Vector3(5, aimTarget.transform.position.y, aimTarget.transform.position.z); }
-        if (aimTarget.transform.position.x < -5) { aimTarget.transform.position = new Vector3(-5, aimTarget.transform.position.y, aimTarget.transform.position.z); }
+        if (aimTarget.transform.position.x > 10) { aimTarget.transform.position = new Vector3(10, aimTarget.transform.position.y, aimTarget.transform.position.z); }
+        if (aimTarget.transform.position.x < -10) { aimTarget.transform.position = new Vector3(-10, aimTarget.transform.position.y, aimTarget.transform.position.z); }
     }
 
     // Al mantener pulsado el boton el cañon cambia a color rojo e inicia una cuenta para calcular la potencia del tiro
@@ -76,6 +79,19 @@ public class DispararBala : MonoBehaviour
 
         Vector3 direccion = posicionFinal.transform.position - posicionInicial.transform.position;
         rb.AddForce(direccion.normalized * potenciaActual);
+
+        GameManager.PotenciaBala();
+        GameManager.IncNumBalas();
+    }
+
+    void ShootClick()
+    {
+        balaInstanciada = Instantiate(bullet, posicionInicial.transform.position, Quaternion.identity);
+
+        Rigidbody rb = balaInstanciada.GetComponent<Rigidbody>();
+
+        Vector3 direccion = posicionFinal.transform.position - posicionInicial.transform.position;
+        rb.AddForce(direccion.normalized * 1250f);
 
         GameManager.PotenciaBala();
         GameManager.IncNumBalas();
