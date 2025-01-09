@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     static float totalSegundos;
 
     GameObject shootButton;
-    GameObject aimTarget;
+    public GameObject aimTarget;
 
     float precision;
 
