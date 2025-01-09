@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     static int numBalas = 0;
     static int numDianasDestruidas = 0;
 
+    static int numBalasTotal = 0;
+
     // Busca los objetos de texto
     static public GameObject bala_texto;
     static public GameObject diana_texto;
@@ -23,12 +25,19 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI temporizadorTexto;
     static float totalSegundos;
 
+    GameObject shootButton;
+    GameObject aimTarget;
+
+    float precision;
+
     void Start()
     {
         // Objetos texto
         bala_texto = GameObject.Find("bulletCount");
         diana_texto = GameObject.Find("targetCount");
         fuerza_texto = GameObject.Find("strength");
+        shootButton = GameObject.Find("ShootButton");
+        shootButton = GameObject.Find("AIM_TARGET");
 
         // Busca los puntos de reaparicion de las dianas
         posicionesDiana = GameObject.FindGameObjectsWithTag("respawnDiana");
@@ -54,6 +63,7 @@ public class GameManager : MonoBehaviour
     static public void IncNumBalas()
     {
         numBalas++;
+        numBalasTotal++;
         bala_texto.GetComponent<TMP_Text>().SetText("Balas: " + numBalas.ToString());
     }
 
@@ -110,6 +120,7 @@ public class GameManager : MonoBehaviour
         if (totalSegundos < 0)
         {
             totalSegundos = 0;
+            PantallaFinal();
         }
 
         float minutos = Mathf.FloorToInt(totalSegundos / 60);
@@ -122,5 +133,24 @@ public class GameManager : MonoBehaviour
     static public void AddTiempo()
     {
         totalSegundos += 3;
+    }
+
+    void PantallaFinal()
+    {
+        if (numBalasTotal == 0 || numDianasDestruidas == 0)
+        {
+            precision = 0;
+        } else
+        {
+            precision = (numDianasDestruidas * 100) / numBalasTotal;
+        }
+        Debug.Log(precision);
+        bala_texto.SetActive(false);
+        diana_texto.SetActive(false);
+        fuerza_texto.SetActive(false);
+        temporizadorCanvas.SetActive(false);
+        shootButton.SetActive(false);
+        aimTarget.SetActive(false);
+        Time.timeScale = 0;
     }
 }
