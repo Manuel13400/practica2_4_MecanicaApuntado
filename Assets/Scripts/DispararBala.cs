@@ -14,11 +14,6 @@ public class DispararBala : MonoBehaviour
     // Objeto mirilla
     GameObject aimTarget;
 
-    // Potencia del disparo
-    static public float potenciaMinima = 250f;
-    static public float potenciaMaxima = 3250f;
-    static public float potenciaActual = 0;
-
     // Tiempo para calcular la potencia del disparo
     float tiempoInicio;
     float tiempoFinal;
@@ -27,11 +22,22 @@ public class DispararBala : MonoBehaviour
     public GameObject bullet;
     GameObject balaInstanciada;
 
+    public AudioClip disparoSonido;
+    private AudioSource audioSource;
+
+    // Potencia del disparo
+    /*static public float potenciaMinima = 250f;
+    static public float potenciaMaxima = 3250f;
+    static public float potenciaActual = 0;*/
+
     private void Start()
     {
         Button btn = Shoot.GetComponent<Button>();
         btn.onClick.AddListener(ShootClick);
         aimTarget = GameObject.Find("AIM_TARGET");
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) { audioSource = gameObject.AddComponent<AudioSource>(); }
     }
 
     private void Update()
@@ -51,8 +57,26 @@ public class DispararBala : MonoBehaviour
         if (aimTarget.transform.position.x < -10) { aimTarget.transform.position = new Vector3(-10, aimTarget.transform.position.y, aimTarget.transform.position.z); }
     }
 
+    void ShootClick()
+    {
+        balaInstanciada = Instantiate(bullet, posicionInicial.transform.position, Quaternion.identity);
+
+        if (disparoSonido != null)
+        {
+            audioSource.PlayOneShot(disparoSonido);
+        }
+
+        Rigidbody rb = balaInstanciada.GetComponent<Rigidbody>();
+
+        Vector3 direccion = posicionFinal.transform.position - posicionInicial.transform.position;
+        rb.AddForce(direccion.normalized * 2500f);
+
+        //GameManager.PotenciaBala();
+        GameManager.IncNumBalas();
+    }
+
     // Al mantener pulsado el boton el cañon cambia a color rojo e inicia una cuenta para calcular la potencia del tiro
-    private void OnMouseDown()
+    /*private void OnMouseDown()
     {
         tiempoInicio = Time.time;
         cannon.GetComponent<Renderer>().material.color = Color.red;
@@ -80,20 +104,7 @@ public class DispararBala : MonoBehaviour
         Vector3 direccion = posicionFinal.transform.position - posicionInicial.transform.position;
         rb.AddForce(direccion.normalized * potenciaActual);
 
-        GameManager.PotenciaBala();
+        //GameManager.PotenciaBala();
         GameManager.IncNumBalas();
-    }
-
-    void ShootClick()
-    {
-        balaInstanciada = Instantiate(bullet, posicionInicial.transform.position, Quaternion.identity);
-
-        Rigidbody rb = balaInstanciada.GetComponent<Rigidbody>();
-
-        Vector3 direccion = posicionFinal.transform.position - posicionInicial.transform.position;
-        rb.AddForce(direccion.normalized * 1250f);
-
-        GameManager.PotenciaBala();
-        GameManager.IncNumBalas();
-    }
+    }*/
 }
